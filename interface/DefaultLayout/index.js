@@ -1,14 +1,22 @@
 import Head from "next/head"
 import { PageLayout, Header, Text } from "@primer/react"
+import styles from "./index.module.css"
 
-export default function DefaultLayout({children, metadata = {}}) {
+const contentWidthClasses = {
+    small: styles.smallContent
+}
+
+export default function DefaultLayout({children, contentWidth, metadata = {}}) {
+
+    const extrContentClassName = contentWidthClasses[contentWidth];
+
     return <>
         <Head>
             <title>
                 {metadata.title ? `${metadata.title} - DomaDev` : 'DomaDev'}
             </title>
             {metadata.description && (
-                <meta name="description" value={metadata.description} />
+                <meta name="description" content={metadata.description} />
             )}
         </Head>
 
@@ -24,7 +32,7 @@ export default function DefaultLayout({children, metadata = {}}) {
             </Header.Item>
         </Header>
         <PageLayout>
-            <PageLayout.Content>{children}</PageLayout.Content>
+            <PageLayout.Content width={contentWidth} className={extrContentClassName}>{children}</PageLayout.Content>
             <PageLayout.Footer divider="line">
                 <Text size="small">
                     © {new Date().getFullYear()} DomaDev

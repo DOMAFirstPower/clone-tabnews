@@ -1,13 +1,35 @@
 import { useState } from "react";
-import { Button } from "@primer/react";
+import { Button, FormControl, TextInput, Stack, Heading } from "@primer/react";
+import { Dialog } from '@primer/react/experimental'
 import DefaultLayout from "interface/DefaultLayout";
 
 function RegisterPage() {
-  console.log("RegisterPage");
+  return (
+    <DefaultLayout 
+      contentWidth="small"
+      metadata={{
+        title: "Cadastro",
+        description: "Crie sua conta de forma gratuita."
+      }}
+    >
 
+      <Stack>
+        <Heading as="h1">
+          Cadastro
+        </Heading>
+        <RegisterForm />
+      </Stack>
+
+      
+    </DefaultLayout>
+  );
+}
+
+function RegisterForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [openDialog, setOpenDialog] = useState(false)
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -23,54 +45,72 @@ function RegisterPage() {
     });
 
     if (response.status === 201){
-      location.href = "/register/confirm"
+      //location.href = "/register/confirm"
+      setOpenDialog(true);
     }
-
-    console.log("Status: ", response.status);
-    console.log(await response.json());
   }
 
   return (
-    <DefaultLayout metadata={{
-      title: "Cadastro",
-      description: "Crie sua conta de forma gratuita."
-    }}>
-      <h1>Cadastro</h1>
-
-      <form onSubmit={handleSubmit}>
-        <div>
-          Nome de usuário:<br/>
-          <input 
+    <form onSubmit={handleSubmit}>
+      <Stack>
+        <FormControl>
+          <FormControl.Label>Nome de usuário</FormControl.Label>
+          <TextInput 
             type="text" 
             value={username}
             onChange={(event) => {
               setUsername(event.target.value);
-            }}/>
-        </div>
+            }}
+            block
+            />
+        </FormControl>
 
-        <div>
-          Email:<br/>
-          <input 
+        <FormControl>
+          <FormControl.Label>Email</FormControl.Label>
+          <TextInput 
             type="email" 
             value={email}
             onChange={(event) => {
               setEmail(event.target.value);
-            }}/>
-        </div>
+            }}
+            block
+            />
+        </FormControl>
 
-        <div>
-          Senha:<br/>
-          <input 
+        <FormControl>
+          <FormControl.Label>Senha</FormControl.Label>
+          <TextInput 
             type="password" 
             value={password}
             onChange={(event) => {
               setPassword(event.target.value);
-            }}/>
-        </div>
-        <br />
-        <Button type="submit">Criar Cadastro</Button>
-      </form>
-    </DefaultLayout>
+            }}
+            block
+            />
+        </FormControl>
+
+        <Stack.Item>
+          <Button type="submit" variant="primary">Criar Cadastro</Button>
+          {openDialog && (
+            <Dialog
+              title="Quase lá!"
+              footerButtons={[
+                {
+                  buttonType: 'default',
+                  content: 'OK',
+                  onClick: () => {
+                    setOpenDialog(false);
+                    location.href = "/";
+                  },
+                },
+              ]}
+            >
+              Verifique seu email para confirmar seu cadastro.
+            </Dialog>
+          )}
+        </Stack.Item>
+      </Stack>
+    </form>
   );
 }
 

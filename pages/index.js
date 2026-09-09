@@ -3,7 +3,7 @@ import DefaultLayout from "interface/DefaultLayout";
 function Home() {
   return (
     <DefaultLayout>
-      <h1>Página em Construção</h1>
+      <h1>Aplicação de apredizagem, através do curso.dev</h1>
     </DefaultLayout>
   );
 }
